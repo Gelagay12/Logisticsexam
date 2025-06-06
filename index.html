@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>East Africa College - Logistics and Supply Chain Management Model Exam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div id="name-container" class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+    <h1 class="text-2xl font-bold mb-2">East Africa College</h1>
+    <h2 class="text-xl font-semibold mb-4">Department of Logistics and Supply Chain Management Model Exam</h2>
+    <p class="mb-4">Enter your name:</p>
+    <input id="student-name" type="text" class="border p-2 w-full mb-4 rounded" placeholder="Enter your name">
+    <button id="start-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Start Exam</button>
+  </div>
+  <div id="exam-container" class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 hidden">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">East Africa College</h1>
+        <h2 class="text-xl font-semibold">Department of Logistics and Supply Chain Management Model Exam</h2>
+      </div>
+      <div id="timer" class="text-lg font-semibold">Time Left: <span id="time">02:00:00</span></div>
+    </div>
+    <div id="questions-container" class="mb-6 space-y-6"></div>
+    <div class="flex justify-end">
+      <button id="submit-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit Exam</button>
+    </div>
+  </div>
+  <div id="result-container" class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 hidden">
+    <h1 class="text-2xl font-bold mb-2">East Africa College</h1>
+    <h2 class="text-xl font-semibold mb-4">Department of Logistics and Supply Chain Management Model Exam Results</h2>
+    <p id="score" class="text-lg mb-4"></p>
+    <div id="review" class="space-y-4"></div>
+    <button id="email-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Send Results</button>
+    <button id="restart-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Restart Exam</button>
+  </div>
+
+  <script>
+    // Questions from NewModelFormatted.txt
+    const questions = [
+      {
+        question: "In managing conflict in contract management, which should be the last step to apply?",
+        options: ["Litigation", "Communication", "Arbitration", "Written warning"],
+        correct: 0
+      },
+      {
+        question: "In a negotiation situation where the issue is important to you, show little concern to the other party, and have a good alternative, you take a stance for?",
+        options: ["Compromise", "Contend", "Collaborate", "Concede"],
+        correct: 1
+      },
+      {
+        question: "A salesman may be using _____ if he lies to you or makes promises he cannot fulfill.",
+        options: ["Persuasion", "Coercion", "Influence", "Manipulation"],
+        correct: 3
+      },
+      {
+        question: "Sam is a sales manager at a car dealership. He is instituting a salesperson of the month program where the top seller gets a plaque to hang on their office wall along with a free lunch. Sam is using _____ power.",
+        options: ["Expert", "Legitimate", "Coercive", "Reward"],
+        correct: 3
+      },
+      {
+        question: "If a researcher gives equal chance for all members of the population, his/her sampling method is?",
+        options: ["Systematic sampling", "Stratified sampling", "Simple random sampling", "Quota sampling"],
+        correct: 2
+      },
+      {
+        question: "Quantitative research involves",
+        options: ["Interviewing people to find out their deeply held views about issues", "Collecting data in numerical form", "More rigor than qualitative research", "Interviewing every member of the target population"],
+        correct: 1
+      },
+      {
+        question: "A ______ is the specification of methods and procedures for acquiring the information needed to structure or solve problems.",
+        options: ["Research Design", "Research Problem", "Research Hypothesis", "Research Data"],
+        correct: 0
+      },
+      {
+        question: "The two main styles of research are ______",
+        options: ["Vertical & horizontal process", "Qualitative and quantitative", "Surveys and questionnaires", "Sampling and recording"],
+        correct: 1
+      },
+      {
+        question: "Of the following types of research, which one is used to gather preliminary information to help generate research Hypotheses?",
+        options: ["Descriptive research", "Exploratory research", "Causal research", "Experimental research"],
+        correct: 1
+      },
+      {
+        question: "Of the following, which one is a non-probability sampling?",
+        options: ["Quota sampling", "Systematic sampling", "Cluster sampling", "Stratified random sampling"],
+        correct: 0
+      },
+      {
+        question: "Research proposal is the blue print/plan which contains:",
+        options: ["Statement of the problem", "Result of data analysis", "Conclusion and recommendation of the study", "Summary of major finding of study"],
+        correct: 0
+      },
+      {
+        question: "Type of research that aims at finding a solution for an immediate problem faced by any business organization is known as?",
+        options: ["Applied research", "Pure Research", "Action research", "Analytical research"],
+        correct: 2
+      },
+      {
+        question: "Ali and Gemechu are both university students studying for a final exam in OB. Both students have a goal of making a grade of 90 percent or better despite the time pressures they seem to be facing. Gemechu studied diligently for six hours and made a grade percent of 92 percent. Ali studied diligently for nine hours and also made a grade of 92 percent. Referring to the above Scenario, who is effective?",
+        options: ["Only Gemechu", "Neither Gemechu nor Ali", "Only Ali", "Both Gemechu and Ali"],
+        correct: 3
+      },
+      {
+        question: "Which one of the following characteristics is NOT necessarily true about groups?",
+        options: ["Group members are interdependent", "Groups have assigned goals", "Groups have two or more members", "Groups have shared fates"],
+        correct: 1
+      },
+      {
+        question: "OB is the study of _____________ in the organization",
+        options: ["Human Behavior", "Human", "Employer", "Employees"],
+        correct: 0
+      },
+      {
+        question: "The set of shared beliefs and values that underlie a company’s identity is referred to as:",
+        options: ["Organizational culture", "Organizational mission", "Organizational values", "Organizational beliefs"],
+        correct: 0
+      },
+      {
+        question: "Which one is/are doesn’t explain about narrow span of control?",
+        options: ["More communication between subordinate and superior", "Short organizational structure and few levels of management.", "Few number of subordinates reporting to one superior", "Tall organizational structure and many levels of management"],
+        correct: 1
+      },
+      {
+        question: "Senayit Gemechu works as a sales manager at a telecom firm. The company has recently launched a new product in the market. Her work in the next few weeks involves sharing knowledge about the product with her team members. She will also need to inspire them to reach their sales targets and clarify any doubts about the new product. Which of the following roles is Senayit playing?",
+        options: ["Leader", "Disseminator", "Liaison/ negotiator", "Spokesperson"],
+        correct: 1
+      },
+      {
+        question: "Felicia manages the training department. She notices that Adam, the training assistant, is bored performing the same, repetitive tasks and often has idle time throughout the day. The low morale of Adam concerns Felicia since he is a good employee. Which of the following actions would BEST address this situation?",
+        options: ["Micromanage Adam to ensure he is working consistently", "Redesign the job of Adam responsibilities and tasks", "Place Adam on probation until he shows improvement", "Terminate Adam for his lack of enthusiasm"],
+        correct: 1
+      },
+      {
+        question: "Marisol is using an organizing process in her business. How will the final outcome of this process address position of Marisol as the boss of the company?",
+        options: ["The controlling function will show her as a command line on the organizational chart", "The organizational structure will remove her as she delegates her responsibilities", "The controlling function will identify her as the controller", "The organizational structure will show her as the top of the chain of command"],
+        correct: 3
+      },
+      {
+        question: "Of the following, which one is NOT involved in the controlling process?",
+        options: ["Measuring actual performance", "Determining how to distribute resources", "Taking corrective action", "Establishing performance standards"],
+        correct: 1
+      },
+      {
+        question: "Someone who works at Procter & Gamble, who is responsible for the production, marketing, and profitability of the Tide detergent product line is called a:",
+        options: ["General manager", "Team manager", "Line manager", "supervisory manager"],
+        correct: 0
+      },
+      {
+        question: "Of the following, which one is characteristics of manufacturing operation?",
+        options: ["High degree of uniformity of input & output", "Quality and productivity is difficult to measure", "It is high labor intensive", "High customer contact"],
+        correct: 0
+      },
+      {
+        question: "Of the following operation functions, which one is used to support cost leadership?",
+        options: ["Produce low volume of products", "Invest in automation system", "Use process focused layouts", "Offer high customization"],
+        correct: 1
+      },
+      {
+        question: "Which one of the following is Not included in competitiveness?",
+        options: ["Productivity", "Profitability", "Effectiveness", "Operations strategy"],
+        correct: 3
+      },
+      {
+        question: "Which type of processing system tends to produce the most product variety?",
+        options: ["Assembly and Batch", "Project", "Job-Shop", "Continuous"],
+        correct: 2
+      },
+      {
+        question: "When design and manufacturing engineering people come together early in the design phase to simultaneously develop the product and the processes for creating the product. Which Product Designing Technique is it refers to?",
+        options: ["Modular Design", "Computer aided design", "Concurrent engineering", "Robust design"],
+        correct: 2
+      },
+      {
+        question: "Assume that XY Biscuit factory 2015 productivity was 70 and its productivity increased from 70 of 2015 to 98 in 2016. Therefore, what is the productivity growth rate of the XY Biscuit factory?",
+        options: ["25%", "30%", "40%", "50%"],
+        correct: 3
+      },
+      {
+        question: "Of the following statements, which one is NOT true about level production aggregate planning capacity strategy?",
+        options: ["It sets production at a fixed rate", "It maintains a constant workforce", "It is used for make-to-order products", "It is used for make-to-stock products"],
+        correct: 2
+      },
+      {
+        question: "Of the following strategies for adjusting capacity, which one is feasible for unskilled jobs or in areas with large temporary labor pools?",
+        options: ["Level production strategy", "Chase demand strategy", "Peak demand strategy", "Part-time workers"],
+        correct: 3
+      },
+      {
+        question: "Which one of the following states that end items are to be produced, when these items are needed, and what quantities are needed?",
+        options: ["Master production schedule", "Inventory status records", "Product structure records", "Bill of materials"],
+        correct: 0
+      },
+      {
+        question: "An inventory decision rule states that when the inventory level goes down to 14 gearboxes, 100 gearboxes will be ordered. Which of the following statements is TRUE?",
+        options: ["One hundred is the reorder point, and 14 is the order quantity", "14 is the reorder point, and 100 is the order quantity", "The number 100 is a function of demand during lead time", "14 is the safety stock, and 100 is the reorder point"],
+        correct: 1
+      },
+      {
+        question: "Of the following statements, which one is NOT correct about the basic EOQ model?",
+        options: ["If the setup cost were to decrease, the EOQ would fall", "If annual demand were to double, the number of orders per year would increase", "If the ordering cost were to increase, the EOQ would rise", "If annual demand were to double, the EOQ would also double"],
+        correct: 3
+      },
+      {
+        question: "A certain type of computer costs $1,000, and the annual holding cost is 25% of the value of the item. Annual demand is 10,000 units, and the order cost is $150 per order. What is the approximate economic order quantity?",
+        options: ["70", "110", "183", "600"],
+        correct: 1
+      },
+      {
+        question: "The sales of cycle in a shop in four consecutive months are given as 70, 68, 82, and 95. Exponentially smoothing average method with a smoothing factor of 0.4 is used in forecasting. The expected number of sales in the next month is.",
+        options: ["73", "83", "85", "136"],
+        correct: 2
+      },
+      {
+        question: "ABC Company has a performance standard of 97% fill rate. Last month it achieved a 94% fill rate. This is an example of____?",
+        options: ["Performance gap", "Supplier operational integration", "Operational performance", "Customer success"],
+        correct: 0
+      },
+      {
+        question: "A legal document that travels with the shipment and describes exactly what is in the shipment is called",
+        options: ["certificate of origin", "Commercial Invoice", "Bill of lading", "Fright Invoice"],
+        correct: 2
+      },
+      {
+        question: "What does the consolidation services of a freight forwarder do for the customer?",
+        options: ["Offers lower costs to importers and exporters while building large margins", "Offers lower cost to importers and high cost to exporters while building large margins", "Offers higher costs to importers and exporters while building small margins", "Offers higher costs to importers and exporters while building large margins"],
+        correct: 0
+      },
+      {
+        question: "The most key players in any transportation that takes place within a supply chain are",
+        options: ["the shipper and the supplier", "the shipper and the manufacturer", "the shipper and the receiver", "the shipper and the carrier"],
+        correct: 3
+      },
+      {
+        question: "Which of the following statements about the class rate system is false?",
+        options: ["Shipment costs increase in direct proportion to the increase in distance", "Shippers can reduce their transportation expenses by utilizing fewer, heavier shipments rather than multiple, lighter shipments", "A commodity’s classification can noticeably impact transportation expenses", "Origin and destination zip codes are commonly used when calculating a shipment’s total cost"],
+        correct: 0
+      },
+      {
+        question: "One key reason for increasing importance of transportation from a supply chain perspective is:",
+        options: ["Cost of gas", "Increased emphasis on global collaborative relationships and outsourcing", "Decrease in the amount of imports", "Green supply chain"],
+        correct: 1
+      },
+      {
+        question: "Which of the following is not listed as one of the values of service characteristics for transportation?",
+        options: ["Landed cost", "Transit time", "Insurance rate", "Reliability"],
+        correct: 2
+      },
+      {
+        question: "Which one of the following design options of the transport network is that a truck either delivers a product from a single supplier to multiple retailers or goes from multiple suppliers to a single buyer location?",
+        options: ["Direct shipment network", "All shipment via central distribution center", "Direct shipping with milk runs", "Shipping via central distribution using milk runs"],
+        correct: 2
+      },
+      {
+        question: "Which one of the following is important to provide dependable transportation service and to foster economic development?",
+        options: ["Economic regulation", "Social regulation", "Economic deregulation", "Social deregulation"],
+        correct: 0
+      },
+      {
+        question: "Which one is the part of the Standard bidding document (SBD) that is prepared by the Procurement Entity with aim of informing bidders the administrative regulations and laying foundation for the preparation of a bid or proposal and setting rules for bidding contest?",
+        options: ["Bid Data Sheet", "General Conditions of a Contract", "Special Conditions of a Contract", "Instruction to Bidder"],
+        correct: 3
+      },
+      {
+        question: "Which one of the following economic utilities extremely provided by logistics?",
+        options: ["Possession and Place utility", "Place and Time utility", "Form and Time utility", "Place and Form utility"],
+        correct: 1
+      },
+      {
+        question: "From types of cross-docks which one is used to receive and consolidate supplies?",
+        options: ["distributor cross-dock", "retail cross dock", "Manufacturing cross dock", "transportation cross"],
+        correct: 0
+      },
+      {
+        question: "Which types of logistics concerned with receiving and storing raw materials and components that are needed for production?",
+        options: ["Inbound logistics", "Outbound logistics", "Reverse logistics", "Forward logistics"],
+        correct: 0
+      },
+      {
+        question: "It is cheaper to transport goods in a single 1000 km shipment than in two shipments of 500 km each. Which principle does this refer to?",
+        options: ["Economies of distance", "Economies of transport", "Economies of scale", "Economies of load"],
+        correct: 0
+      },
+      {
+        question: "There are five main functional measures of performance in a logistics measurement system. Which of the five areas measure how cost-effective the organization is at meeting consumer requirements?",
+        options: ["Asset management", "Logistics quality", "Customer service", "Cost control"],
+        correct: 3
+      },
+      {
+        question: "The ___________ concept suggests that the customer desires a product offering that is highly tailored to the customer’s exact preferences.",
+        options: ["market demassification", "niche marketing", "relationship marketing", "customized customer"],
+        correct: 3
+      },
+      {
+        question: "What is the purpose of a bill of lading in logistics management?",
+        options: ["Documenting ownership of goods", "Verifying product quality", "Tracking customer orders", "Coordinating warehouse operations"],
+        correct: 0
+      },
+      {
+        question: "A cost trade-off is a situation where:",
+        options: ["all costs react according to their individual degrees of inflation in the economy", "all costs are reflected as a percentage variation from standard costs", "some costs increase and some costs decrease", "some costs are eliminated by efficient management controls"],
+        correct: 2
+      },
+      {
+        question: "Samantha owns a line of shops which sell luxurious cakes and desserts. Most of her ingredients come from Brazil, but a recent increase in tariffs has forced her to think about her supplying options. She is thinking about whether or not to pay for the higher new price or find a new supplier. What does this impact MOST?",
+        options: ["Quality", "Procurement", "Logistics", "Production"],
+        correct: 1
+      },
+      {
+        question: "Tina is a CEO of a large manufacturing company that she wants to move overseas. The culture there is very different and Tina knows that she has to prepare for the meetings there. Which of the following would be a good solution to one of the first obstacles she is going to encounter?",
+        options: ["Hiring a tax advisor", "Hiring an expert on cultural matters", "Lobbying with the government of the country", "Hiring a translator"],
+        correct: 3
+      },
+      {
+        question: "The process of determining what needs to be purchased and when, so that it is most helpful to the project is known as what?",
+        options: ["change review and approval processes", "public relations plans", "procurement planning", "vendor processes"],
+        correct: 2
+      },
+      {
+        question: "Of the following which one is Not a factor that affect foreign procurement?",
+        options: ["Low total landed cost", "Unavoidable duty/tariff", "Low product volatility and high quality", "Culture similarities"],
+        correct: 3
+      },
+      {
+        question: "Which one of the following is NOT correct about international competitive bidding?",
+        options: ["Bidders must be given adequate time to prepare bid documents", "The bid advertisement shall be published in a newspaper that has wide circulation and accessible to foreign bidders", "A foreign bidder uses local inputs to satisfy the required object of procurement under the contract", "The bid advertisement and the bidding documents shall be prepared in local language"],
+        correct: 3
+      },
+      {
+        question: "Which one of the following is not correct about evaluation of tender?",
+        options: ["Submitted tenders are evaluated against the award criteria described in the tender documentation", "Submitted tenders are evaluated against the Instructions to bidders described in the tender documentation", "Advantageous Tender which is a combination of quality and price", "Suppliers are notified of the outcome and given a written debrief"],
+        correct: 1
+      },
+      {
+        question: "A bid may be rejected under all of the following circumstances except cases where:",
+        options: ["The bidder, or any employee or subcontractor included as part of the bid, has been convicted under the fraud, bribery, fraudulent misrepresentation sections of the Criminal Code of Ethiopia and has not been granted pardon", "The bidder is bankrupt or where, for whatever reason, its activities are rendered inoperable for an extended period", "The bidder has performed poorly on other contracts and the department does not want to work with that bidder again", "Evidence, satisfactory to Ethiopia, of failure to comply with any law protecting individuals against any manner of discrimination has been received with respect to the bidder"],
+        correct: 2
+      },
+      {
+        question: "Why is active listening important in integrative bargaining?",
+        options: ["Because you are listening to truly, understand the interests of the other party versus simply thinking of your next response.", "You have to listen hard so you can be ready with a rapid response to keep the other party off balance.", "You have to act like you are paying attention so the other party does not get angry.", "You have to let the other party finish their thought so that you are not rude."],
+        correct: 0
+      },
+      {
+        question: "Identify the wrong statement regarding contract management and contract administration",
+        options: ["Contract administration is more strategic than contract management", "Contract management is broader concept than contract administration", "Contract management is aimed not at finding fault", "Contract administration focuses on routine and operational activity"],
+        correct: 0
+      },
+      {
+        question: "A salesman may be using _____ if he lies to you or makes promises he cannot fulfill.",
+        options: ["Persuasion", "Influence", "Coercion", "Manipulation"],
+        correct: 3
+      },
+      {
+        question: "Sam is a sales manager at a car dealership. He is instituting a salesperson of the month program where the top seller gets a plaque to hang on their office wall along with a free lunch. Sam is using _____ power.",
+        options: ["Expert", "Coercive", "Reward", "Legitimate"],
+        correct: 2
+      },
+      {
+        question: "The more you can convince the other that you value a particular outcome outside the bargaining range of the other, the more pressure you put on the other party to set by one of the following resistance points:",
+        options: ["High", "Low", "Modest", "Extreme"],
+        correct: 1
+      },
+      {
+        question: "Which of the following is not a reason that negotiations fail?",
+        options: ["Allowing insufficient time for planning", "Failing to set clear objectives", "Depending on being quick and clever during negotiations", "Understanding their strengths and weaknesses and the positions other party"],
+        correct: 3
+      },
+      {
+        question: "What are the most critical precursors for achieving negotiation objectives?",
+        options: ["Effective strategizing and planning", "Defining frames and setting goals", "Goal setting and target planning", "Framing and strategizing"],
+        correct: 0
+      },
+      {
+        question: "Which one of the following is not the objectives of negotiation?",
+        options: ["To agree on how to share or divide a limited resource", "To create something new that neither party could do on his or her own", "To resolve a problem between the parties", "To aggravate the disputes between the parties"],
+        correct: 3
+      },
+      {
+        question: "One among the following aims to reduce the impact of factors such as pollutants, deforestation, ozone depletion, and global warming affecting the environment.",
+        options: ["Sustainability", "Supply chain sustainability", "Reverse logistics", "Forward logistics"],
+        correct: 0
+      },
+      {
+        question: "What is triple bottom line?",
+        options: ["An accounting tool that looks at the impact on people, planet, and profits", "An accounting tool that looks at cost, profit, and loss", "A management strategy which states all the attention should be on profits", "A management strategy which focuses on corporate social responsibility"],
+        correct: 0
+      },
+      {
+        question: "One of the current trends in Operations and Supply Chain Management is Sustainable Supply Chain Management, which encourages supply chain managers to consider the three bottom lines listed below, except",
+        options: ["Environmental Stewardship", "Quality management", "Economic prosperity", "Social responsibility"],
+        correct: 1
+      },
+      {
+        question: "Of the following alternative which one is Not economic measure?",
+        options: ["Personal income", "Cost under employment", "Job growth", "Excessive nutrients"],
+        correct: 3
+      },
+      {
+        question: "Which of the following supply chain strategies creates value by allowing suppliers to have economies of scale?",
+        options: ["suppliers becoming part of a company coalition", "vertical integration", "long-term partnering with a few suppliers", "negotiating with many suppliers"],
+        correct: 2
+      },
+      {
+        question: "Assume that, AU has recently decided to install a new IT system to improve the efficiency of its payroll function. AU believes this will reduce the cost of running the payroll system by 15%. Which one of the following levels of strategy is the above IT system most closely linked to?",
+        options: ["Corporate strategy", "Business strategy", "Functional strategy", "Strategic evaluation"],
+        correct: 2
+      },
+      {
+        question: "The internal growth strategies in which an organization expands itself into different areas, whether related or unrelated to its core business called______.",
+        options: ["Concentric Diversification", "Conglomerate diversification", "Value chain partners", "Joint venture"],
+        correct: 1
+      },
+      {
+        question: "All of the following are challenges of Strategic Supply Chain Management, except ________.",
+        options: ["Supply Chain Resilience and Agility", "Product demand uncertainty", "Mismatch between ordering amount and actual need", "Product demand uncertainty"],
+        correct: 2
+      },
+      {
+        question: "Which supply chain strategy would be best when the demand uncertainty is high and firms want to respond to customers quickly?",
+        options: ["Push-based strategy", "Speculation strategy", "Lean strategy", "Agile based strategy"],
+        correct: 3
+      },
+      {
+        question: "Which type of items is the appropriate procurement strategy to force competition between suppliers, when there are many suppliers to choose from for these items?",
+        options: ["Bottleneck items", "Leverage items", "Strategic items", "Noncritical items"],
+        correct: 1
+      },
+      {
+        question: "Make-to-stock operational strategy is similar to one of the following Supply chain strategies, which one is the SC strategy?",
+        options: ["Lean SC strategy", "Agile SC strategy", "Push SC strategy", "Postponement SC strategy"],
+        correct: 2
+      },
+      {
+        question: "The properties of e-money that should be considered in transactions as how well money holds its value over time and how easy money is to store, and access called______.",
+        options: ["Interoperability", "Conservation", "Economy", "Scalability"],
+        correct: 2
+      },
+      {
+        question: "Which types of information systems produce a variety of information about products and services for internal and external use?",
+        options: ["Operations Support Systems", "Management Support Systems", "Decision Support Systems", "Executive Information Systems"],
+        correct: 1
+      },
+      {
+        question: "E-commerce payment system in which the buyer is clearly identified and the card is validated against computer of the issuing bank computer before payment is made is known as _____?",
+        options: ["Identified and online", "Identified and offline", "Anonymous and online", "Anonymous and offline"],
+        correct: 0
+      },
+      {
+        question: "Which one of the features of e-commerce indicated as it can be everywhere?",
+        options: ["Interactivity", "Universal Standards", "Global Reach", "Ubiquity"],
+        correct: 3
+      },
+      {
+        question: "Which supply chain information system tools are used to automate transactions such as order entry, order processing, transportation, and related financial transactions?",
+        options: ["Enterprise Resource Planning", "Satellite Technology", "Electronic Data Interchange", "Radio Frequency Exchange"],
+        correct: 2
+      },
+      {
+        question: "Which one of the following is incorrect about e-commerce?",
+        options: ["It enables to conducted business across the world", "It enhances the competitiveness advantage", "E-commerce is anything digital that a firm owned", "E-commerce can be everywhere"],
+        correct: 2
+      },
+      {
+        question: "All of the following are potential benefits of B2B e-commerce except:",
+        options: ["increased production flexibility", "increased product cycle time", "increased opportunities to collaborate with suppliers and distributors", "increased visibility and real-time information sharing among all participants in the supply chain network"],
+        correct: 1
+      },
+      {
+        question: "MRP is a _____________ function.",
+        options: ["computer-integrated manufacturing", "planning production and operation", "in-house logistics and materials management", "product lifecycle management"],
+        correct: 1
+      },
+      {
+        question: "Which one of the following supply chain phenomena describing small fluctuations in demand at the retail level can cause progressively larger fluctuations in demand at the wholesale, distributor, or raw materials supplier?",
+        options: ["Lead-time", "Price fluctuation", "Bullwhip effect", "Batch ordering"],
+        correct: 2
+      },
+      {
+        question: "Which one of the following information technology systems is a highly analytical application whose purpose is to assess plant capacity, material availability, and customer demand?",
+        options: ["Enterprise resources planning", "Manufacturing Execution Systems", "Inventory Management Systems", "Advanced Planning and Scheduling"],
+        correct: 3
+      },
+      {
+        question: "When all the different stages of a supply chain work toward the objective of maximizing total supply chain profitability, rather than each stage devoting itself to its own profitability without considering total supply chain profit, it is known as__",
+        options: ["supply chain coordination", "pricing", "forecasting", "aggregate planning"],
+        correct: 0
+      },
+      {
+        question: "A supply chain driven by actual customer orders or purchases follows a ________ model.",
+        options: ["push-based", "replenishment-driven", "continuous delivery", "pull-based"],
+        correct: 3
+      },
+      {
+        question: "Which supply chain planning function determines how much product is needed to satisfy all customer demands?",
+        options: ["Order planning", "Just-in-time planning", "Demand planning", "Replenishment planning"],
+        correct: 2
+      },
+      {
+        question: "All of the following are typical processes involved in supply chain management except _____.",
+        options: ["customer-order fulfillment", "demand and supply planning", "supplier evaluation and selection", "cash flow management"],
+        correct: 3
+      },
+      {
+        question: "A supply chain is alternatively referred to by what name?",
+        options: ["Demand chain", "Value chain", "Logistics chain", "Production chain"],
+        correct: 1
+      },
+      {
+        question: "Which of the following statements is NOT true regarding supply chain management?",
+        options: ["Globalization has slowed the growth of supply chain management", "Supply chain management is a way of viewing operations management", "Supply chain management has grown as a result of a focus on core competencies", "Supply chain management is about making the most of relationships with suppliers"],
+        correct: 0
+      },
+      {
+        question: "Which one of the following statements is false?",
+        options: ["The Authority may allow cancellation of the goods declaration on good cause prior to the payment of the duty and tax.", "Any amendment may be made, if authorized by the Authority for any cause.", "After presentation of goods declaration, with fraudulent intent or gross negligence shall entail penalty.", "Any person having the right to dispose of the goods shall be entitled to act as declarant, and shall be entitled to be represented by a custom clearing agent"],
+        correct: 2
+      },
+      {
+        question: "Which document is used to prove the value and authenticity of goods?",
+        options: ["Certificate of origin", "Bill of lading", "Commercial invoice", "Insurance certificate"],
+        correct: 2
+      },
+      {
+        question: "What is the purpose of a packing list in customs procedures?",
+        options: ["To describe the contents of a shipment", "To track the movement of goods", "To declare the value of statements", "To calculate shipping costs"],
+        correct: 0
+      },
+      {
+        question: "Which of the following is an example of a non-documentary trade barrier? Which of the following best defines supply chain management?",
+        options: ["Import duties", "Quotas", "Bill of lading", "Certificate of origin"],
+        correct: 1
+      },
+      {
+        question: "Which one is not a typical objective of supply chain management?",
+        options: ["Reducing costs", "Improving customer satisfaction", "Decreasing collaboration", "Increasing responsiveness"],
+        correct: 2
+      },
+      {
+        question: "What is the main goal of logistics in the supply chain?",
+        options: ["Increase marketing efforts", "Improve financial accounting", "Ensure efficient flow of goods, services, and information", "Focus on branding"],
+        correct: 2
+      },
+      {
+        question: "Inbound logistics involves:",
+        options: ["Shipping products to customers", "Receiving and storing materials from suppliers", "Customer service", "Final product delivery"],
+        correct: 1
+      },
+      {
+        question: "Which of the following is an outbound logistics activity?",
+        options: ["Receiving raw materials", "Assembling parts", "Shipping finished goods to customers", "Purchasing inventory"],
+        correct: 2
+      },
+      {
+        question: "Which type of inventory system updates stock levels continuously?",
+        options: ["Periodic system", "Continuous review system", "Two-bin system", "Reorder point system"],
+        correct: 1
+      },
+      {
+        question: "What is the bullwhip effect?",
+        options: ["A method of measuring inventory turnover", "Demand distortion caused by order variability up the supply chain", "The result of efficient demand forecasting", "A strategy for reducing lead time"],
+        correct: 1
+      },
+      {
+        question: "A Just-In-Time (JIT) system focuses on:",
+        options: ["Holding high safety stocks", "Producing goods in advance of demand", "Minimizing inventory levels", "Long production runs"],
+        correct: 2
+      },
+      {
+        question: "Which of the following is a function of a distribution center?",
+        options: ["Assembling components", "Warehousing and cross-docking", "Product design", "Manufacturing"],
+        correct: 1
+      },
+      {
+        question: "Reverse logistics deals with:",
+        options: ["Delivering finished goods to customers", "Sending defective goods back to suppliers", "Managing production lines", "Sales forecasting"],
+        correct: 1
+      },
+      {
+        question: "Which transportation mode is best for high-value, time-sensitive goods?",
+        options: ["Rail", "Ocean freight", "Air", "Pipeline"],
+        correct: 2
+      },
+      {
+        question: "Which performance measure evaluates logistics cost efficiency?",
+        options: ["Fill rate", "On-time delivery", "Cost per order", "Inventory accuracy"],
+        correct: 2
+      },
+      {
+        question: "A key goal of supply chain visibility is to:",
+        options: ["Increase warehouse labor", "Improve tracking and decision-making", "Add suppliers", "Eliminate customer feedback"],
+        correct: 1
+      },
+      {
+        question: "Which tool is commonly used for demand forecasting?",
+        options: ["SWOT analysis", "Exponential smoothing", "Regression dilution", "Six Sigma"],
+        correct: 1
+      },
+      {
+        question: "Which of the following represents a push-based supply chain strategy?",
+        options: ["Production based on actual customer demand", "Customization after customer order", "Forecast-driven production", "Order-based scheduling"],
+        correct: 2
+      },
+      {
+        question: "Which of the following is not a benefit of effective logistics management?",
+        options: ["Reduced delivery time", "Decreased inventory turnover", "Improved customer satisfaction", "Lower transportation costs"],
+        correct: 1
+      },
+      {
+        question: "A 3PL provider offers:",
+        options: ["Manufacturing services", "Financial audits", "Logistics and supply chain services", "Only warehousing"],
+        correct: 2
+      },
+      {
+        question: "Which incoterm puts most responsibility on the seller?",
+        options: ["FOB", "CIF", "DDP", "EXW"],
+        correct: 2
+      },
+      {
+        question: "What is the primary function of a warehouse?",
+        options: ["Marketing products", "Storing goods", "Manufacturing products", "Designing packaging"],
+        correct: 1
+      },
+      {
+        question: "Which KPI measures supply chain responsiveness?",
+        options: ["Return on investment", "Cash-to-cash cycle time", "Inventory carrying cost", "Gross margin"],
+        correct: 1
+      },
+      {
+        question: "The term “lead time” refers to:",
+        options: ["Number of defective products", "Time taken to manufacture goods", "Time between order placement and delivery", "Time for supplier negotiation"],
+        correct: 2
+      },
+      {
+        question: "Which strategy focuses on reducing variation and improving quality?",
+        options: ["Kaizen", "Six Sigma", "SWOT", "Agile"],
+        correct: 1
+      },
+      {
+        question: "Cross-docking is used to:",
+        options: ["Store products long-term", "Increase packaging costs", "Minimize storage time and speed up deliveries", "Reduce product variety"],
+        correct: 2
+      },
+      {
+        question: "An example of a supply chain risk is:",
+        options: ["Forecasting", "Transportation delays", "Performance appraisal", "Product launch"],
+        correct: 1
+      },
+      {
+        question: "Which metric is used to evaluate warehouse space utilization?",
+        options: ["On-time delivery", "Dock-to-stock time", "Inventory turnover", "Cube utilization"],
+        correct: 3
+      },
+      {
+        question: "The main purpose of safety stock is to:",
+        options: ["Increase order size", "Avoid stockouts due to demand variability or supply variability", "Reduce inventory turnover", "Minimize customer demand"],
+        correct: 1
+      },
+      {
+        question: "Vendor Managed Inventory (VMI) allows:",
+        options: ["Customers to manage supplier’s inventory", "Retailers to control suppliers’ production", "Suppliers to manage inventory at customer location", "Wholesalers to outsource to 3PLs"],
+        correct: 2
+      },
+      {
+        question: "Which of the following is a lean supply chain strategy?",
+        options: ["High buffer stock", "Short setup times and reduced waste", "Centralized production", "Long lead times"],
+        correct: 1
+      },
+      {
+        question: "The fill rate is the percentage of:",
+        options: ["Orders processed per employee", "Customers that return goods", "Orders delivered without stockouts", "Revenue generated from logistics"],
+        correct: 2
+      },
+      {
+        question: "What is the primary goal of procurement in supply chain?",
+        options: ["Attracting new customers", "Acquiring goods and services cost-effectively", "Marketing new products", "Hiring skilled labor"],
+        correct: 1
+      },
+      {
+        question: "Which software integrates all departments and functions across a company into a single system?",
+        options: ["CRM", "ERP", "SCM", "WMS"],
+        correct: 1
+      },
+      {
+        question: "Which of the following factors most affects transportation costs?",
+        options: ["Product variety", "Packaging style", "Fuel prices", "Advertising"],
+        correct: 2
+      }
+    ];
+
+    let answers = new Array(questions.length).fill(null);
+    let timeLeft = 7200; // 2 hours in seconds
+    let timerInterval;
+    let studentName = '';
+
+    // DOM elements
+    const nameContainer = document.getElementById('name-container');
+    const examContainer = document.getElementById('exam-container');
+    const resultContainer = document.getElementById('result-container');
+    const questionsContainer = document.getElementById('questions-container');
+    const submitBtn = document.getElementById('submit-btn');
+    const scoreDisplay = document.getElementById('score');
+    const reviewContainer = document.getElementById('review');
+    const emailBtn = document.getElementById('email-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const startBtn = document.getElementById('start-btn');
+    const timerDisplay = document.getElementById('time');
+
+    function loadQuestions() {
+      return questions; // Return embedded questions
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    function loadAllQuestions() {
+      questionsContainer.innerHTML = '';
+      questions.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.className = 'border-b pb-4';
+        div.innerHTML = `
+          <p class="text-lg font-medium mb-2">Question ${index + 1}: ${q.question}</p>
+          <div class="space-y-2">
+            ${q.options.map((option, i) => `
+              <div class="flex items-center">
+                <input type="radio" name="question_${index}" id="option_${index}_${i}" value="${i}" ${answers[index] === i ? 'checked' : ''}>
+                <label for="option_${index}_${i}" class="ml-2">${option}</label>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        questionsContainer.appendChild(div);
+      });
+    }
+
+    function saveAnswers() {
+      questions.forEach((_, index) => {
+        const selected = document.querySelector(`input[name="question_${index}"]:checked`);
+        if (selected) {
+          answers[index] = parseInt(selected.value);
+        }
+      });
+    }
+
+    function submitExam() {
+      saveAnswers();
+      clearInterval(timerInterval);
+      let score = 0;
+      answers.forEach((answer, i) => {
+        if (answer === questions[i].correct) score++;
+      });
+      examContainer.classList.add('hidden');
+      resultContainer.classList.remove('hidden');
+      scoreDisplay.textContent = `Student: ${studentName} | Score: ${score} out of ${questions.length} (${(score / questions.length * 100).toFixed(2)}%)`;
+      reviewContainer.innerHTML = '';
+      questions.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'border-b py-2';
+        div.innerHTML = `
+          <p class="font-medium">Question ${i + 1}: ${q.question}</p>
+          <p>Your Answer: ${answers[i] !== null ? q.options[answers[i]] : 'Not answered'} 
+            ${answers[i] === q.correct ? '<span class="text-green-600">(Correct)</span>' : 
+              answers[i] !== null ? `<span class="text-red-600">(Incorrect, Correct: ${q.options[q.correct]})</span>` : 
+              `<span class="text-red-600">(Correct: ${q.options[q.correct]})</span>`}
+          </p>
+        `;
+        reviewContainer.appendChild(div);
+      });
+    }
+
+    function sendResults() {
+      let score = 0;
+      answers.forEach((answer, i) => {
+        if (answer === questions[i].correct) score++;
+      });
+      const resultText = `Institution: East Africa College\nDepartment: Logistics and Supply Chain Management Model Exam\nStudent: ${studentName}\nScore: ${score}/${questions.length} (${(score / questions.length * 100).toFixed(2)}%)\n\nReview:\n${questions.map((q, i) => 
+        `Q${i + 1}: ${q.question}\nYour Answer: ${answers[i] !== null ? q.options[answers[i]] : 'Not answered'} ${answers[i] === q.correct ? '(Correct)' : `(Incorrect, Correct: ${q.options[q.correct]})`}`
+      ).join('\n\n')}`;
+      const subject = encodeURIComponent(`Exam Results for ${studentName} - East Africa College`);
+      const body = encodeURIComponent(resultText);
+      window.location.href = `mailto:dannat27@gmail.com?subject=${subject}&body=${body}`;
+    }
+
+    startBtn.addEventListener('click', () => {
+      studentName = document.getElementById('student-name').value.trim();
+      if (studentName) {
+        nameContainer.classList.add('hidden');
+        examContainer.classList.remove('hidden');
+        loadAllQuestions();
+        startTimer();
+      } else {
+        alert('Please enter your name.');
+      }
+    });
+
+    submitBtn.addEventListener('click', submitExam);
+
+    emailBtn.addEventListener('click', sendResults);
+
+    restartBtn.addEventListener('click', () => {
+      answers = new Array(questions.length).fill(null);
+      studentName = '';
+      timeLeft = 7200;
+      examContainer.classList.add('hidden');
+      resultContainer.classList.add('hidden');
+      nameContainer.classList.remove('hidden');
+      document.getElementById('student-name').value = '';
+    });
+
+    // Load questions
+    loadQuestions();
+  </script>
+</body>
+</html>
